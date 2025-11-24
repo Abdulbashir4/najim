@@ -45,7 +45,7 @@ if(isset($_POST['add_shop_btn'])){
     $sql= " INSERT INTO shops(shop_name,address,contact_person,phone) 
     VALUES('$shop_name', '$address', '$contact_person', '$phone') ";
     if($conn->query($sql)){
-        echo" <script> alert('Shop Added SuccecFully'); window.location.href='add_shop.php';</script> ";
+        echo" <script> alert('Shop Added Succecfully'); window.location.href='add_shop.php';</script> ";
 
     }
     else{

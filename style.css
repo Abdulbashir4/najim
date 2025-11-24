@@ -1063,7 +1063,7 @@ font-size: 20px;
 }
 /* for sale page */
 .cls01{
-
+display: flex;
 }
 .cls05 {
     background-color: var(--background);
@@ -1279,33 +1279,7 @@ input, textarea {
   margin-top: 25px;
 }
 
-/* for product bye page */
-/* .cls10{
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-.cls10 h1{
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-.cls10 hr{
-  width: 100%;
-}
-.cls11{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.cls12{
-  padding: 20px;
-}
-.cls12 h1{
-  font-size: 20px;
-  text-align: center;
-}
-  */
+
 .cls12 table{
   width: 100%;
 }
@@ -1324,18 +1298,7 @@ input, textarea {
     border: 1px solid black;
     border-radius: 7px;
 }
-/*
-.cls13{
-  display: flex;
-  justify-content: center;
-  padding: 15px 0;
-}
-.cls13 button{
-  width: 100%;
-}
-.cls14{
-  padding: 20px 0;
-} */
+
 #bye_form{
   padding: 10px 0px 0px 0px;
   background-color: #e7e2e2;
