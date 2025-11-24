@@ -85,7 +85,7 @@
                 <img src="image/product.png" alt="">
                 <span>Billing and Invoice</span>
             </div>
-            <div class="sidebar_button">
+            <div class="sidebar_button" onclick="window.location.href='account_page.php'">
                 <img src="image/call.png" alt="">
                 <span>Payment and Accounts</span>
             </div>
