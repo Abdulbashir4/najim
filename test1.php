@@ -1,145 +1,322 @@
-<?php
-// customer_payment_history.php
-include 'server_connection.php';
-
-$customer_id = isset($_GET['customer_id']) ? (int) $_GET['customer_id'] : 0;
-if ($customer_id <= 0) {
-    die("Invalid customer id");
-}
-
-// কাস্টমার ইনফো
-$customer_sql = "SELECT * FROM customers WHERE customer_id = $customer_id";
-$customer_res = $conn->query($customer_sql);
-$customer = $customer_res->fetch_assoc();
-
-// ইনভয়েস + পেমেন্ট হিস্টোরি
-$sql = "
-SELECT 
-    i.id AS invoice_id,
-    i.sale_date,
-    i.invoice_no,
-
-    SUM(s.sale_amount) AS invoice_total,
-
-    i.paid_amount AS initial_paid,
-
-    COALESCE((
-        SELECT SUM(inst.amount_paid)
-        FROM installments inst
-        JOIN sales s2 ON s2.sale_id = inst.sale_id
-        WHERE s2.invoice_no COLLATE utf8mb4_general_ci = i.invoice_no COLLATE utf8mb4_general_ci
-    ), 0) AS installments_paid,
-
-    (
-        i.paid_amount +
-        COALESCE((
-            SELECT SUM(inst.amount_paid)
-            FROM installments inst
-            JOIN sales s2 ON s2.sale_id = inst.sale_id
-            WHERE s2.invoice_no COLLATE utf8mb4_general_ci = i.invoice_no COLLATE utf8mb4_general_ci
-        ), 0)
-    ) AS total_paid,
-
-    (
-        SUM(s.sale_amount) -
-        (
-            i.paid_amount +
-            COALESCE((
-                SELECT SUM(inst.amount_paid)
-                FROM installments inst
-                JOIN sales s2 ON s2.sale_id = inst.sale_id
-                WHERE s2.invoice_no COLLATE utf8mb4_general_ci = i.invoice_no COLLATE utf8mb4_general_ci
-            ), 0)
-        )
-    ) AS current_due
-
-FROM invoices i
-LEFT JOIN sales s 
-    ON s.invoice_no COLLATE utf8mb4_general_ci = i.invoice_no COLLATE utf8mb4_general_ci
-
-WHERE i.customer_id = $customer_id
-
-GROUP BY 
-    i.id, i.sale_date, i.invoice_no, i.paid_amount
-
-ORDER BY i.sale_date ASC;
-
-";
-
-$result = $conn->query($sql);
-
-// গ্র্যান্ড টোটাল
-$grand_invoice_total = 0;
-$grand_total_paid    = 0;
-$grand_total_due     = 0;
-?>
-
+<?php include'server_connection.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Customer Payment History</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Corporation</title>
+    
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 900px; margin: 0 auto; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: right; }
-        th { background: #f0f0f0; }
-        td:first-child, th:first-child { text-align: left; }
-        h2, h3 { margin: 5px 0; }
+        /* ==== MAIN AREA ==== */
+.main {
+    margin-left: 220px; /* sidebar space */
+    padding: 20px;
+    background: #f2f6ff;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.for_content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+}
+
+/* ==== TOP FILTER BAR ==== */
+.cls17 {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.cls17 select, 
+.cls17 input {
+    padding: 10px 12px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    transition: .3s;
+}
+
+.cls17 select:focus,
+.cls17 input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px #007bff;
+}
+
+/* ==== FORM TABLES SECTION ==== */
+.cls18 {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+#id02 {
+    width: 350px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    padding: 18px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+#id02 th {
+    text-align: left;
+    padding: 10px 0;
+    font-size: 15px;
+    color: #333;
+}
+
+#id02 td {
+    padding: 8px 0;
+}
+
+#id02 select,
+#id02 input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: .3s;
+}
+
+#id02 input:focus,
+#id02 select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px #007bff;
+}
+
+/* ==== BUTTONS ==== */
+#id01 {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin: 3px;
+}
+
+button#id01:nth-child(1) {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+button#id01:nth-child(2) {
+    background: #007bff;
+    color: #fff;
+}
+
+button#id01:hover {
+    opacity: .85;
+}
+
+/* ==== DATA TABLE ==== */
+.contant table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.contant th {
+    background: #007bff;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.contant td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.contant tr:hover {
+    background: #f0f7ff;
+}
+
+.contant td:last-child {
+    color: red;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media(max-width: 768px){
+    .cls17 {
+        flex-direction: column;
+    }
+    .cls18 {
+        flex-direction: column;
+    }
+    .main {
+        margin-left: 0;
+    }
+}
+
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>Customer Payment History</h2>
+<?php include 'header_and_sidebar_for_admin.php'; ?>
+    <div class="main">
+    <div class="for_content" id="contentArea">
+     <div class="cls17">
+        <select name="" id="">
+            <option value="">Supplier Payment</option>
+            <option value="">Customer Payment</option>
+        </select>
+        <input type="text" placeholder="Invoice no">
+        <input type="date" placeholder="From Date">
+        <input type="date" placeholder="To Date">
+     </div>
+        <div class="cls18">
+                <table id="id02">
+                    <tr>
+                        <th>Transsaction Type</th>
+                        <td> <select name="" id="">
+                            <option value="">Payment</option>
+                            <option value="">bill</option>
+                        </select> </td>
+                    </tr>
+                    <tr>
+                        <th>Payment Type</th>
+                        <td><select name="" id="">
+                            <option value="">Cash</option>
+                            <option value="">Bkash</option>
+                            <option value="">Bank Account</option>
+                        </select> </td>
+                    </tr>
+                    <tr>
+                        <th>Supplier</th>
+                        <td><select name="" id="">
+                            <option value="">Supplier</option>
+                            <option value="">Customer</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <th>Due</th>
+                        <td><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">WelCome TO Supplier Basir</th>
+                        
+                    </tr>
+                </table>
+                <table id="id02">
+                    <tr>
+                        <th>Payment Date</th>
+                        <td><input type="date"></td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td><input type="textarea"></td>
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <td><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <td><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button id="id01">Clear</button> <button id="id01">submit</button></td>
+                    </tr>
+                </table>
 
-    <h3>Customer Info</h3>
-    <p>
-        <strong>Name:</strong> <?= htmlspecialchars($customer['name']); ?><br>
-        <strong>Address:</strong> <?php echo htmlspecialchars($customer['address']); ?><br>
-        <strong>Phone:</strong> <?php echo htmlspecialchars($customer['phone']); ?>
-    </p>
+            </div>
+            <div class="contant">
+                <table>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>Date</th>
+                        <th>Supplier ID</th>
+                        <th>Trans: Type</th>
+                        <th>Paid by</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                        <th>Save By</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td>MS-2025001</td>
+                        <td>11/08/2025</td>
+                        <td>MS-0095</td>
+                        <td>Payment</td>
+                        <td>Cash</td>
+                        <td>10000</td>
+                        <td>reagent purcher cash paid by basir</td>
+                        <td>Basir</td>
+                        <td>Delete</td>
 
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Invoice No</th>
-            <th>Invoice Amount</th>
-            <th>Initial Paid</th>
-            <th>Installments Paid</th>
-            <th>Total Paid</th>
-            <th>Current Due</th>
-        </tr>
+                    </tr>
+                    <tr>
+                        <td>MS-2025001</td>
+                        <td>11/08/2025</td>
+                        <td>MS-0095</td>
+                        <td>Payment</td>
+                        <td>Cash</td>
+                        <td>10000</td>
+                        <td>reagent purcher cash paid by basir</td>
+                        <td>Basir</td>
+                        <td>Delete</td>
 
-        <?php while ($row = $result->fetch_assoc()): 
-            $grand_invoice_total += $row['invoice_total'];
-            $grand_total_paid    += $row['total_paid'];
-            $grand_total_due     += $row['current_due'];
-        ?>
-        <tr>
-            <td><?php echo htmlspecialchars($row['sale_date']); ?></td>
-            <td style="text-align:left;"><?php echo htmlspecialchars($row['invoice_no']); ?></td>
-            <td><?php echo number_format($row['invoice_total'], 2); ?></td>
-            <td><?php echo number_format($row['initial_paid'], 2); ?></td>
-            <td><?php echo number_format($row['installments_paid'], 2); ?></td>
-            <td><?php echo number_format($row['total_paid'], 2); ?></td>
-            <td><?php echo number_format($row['current_due'], 2); ?></td>
-        </tr>
-        <?php endwhile; ?>
+                    </tr>
+                    <tr>
+                        <td>MS-2025001</td>
+                        <td>11/08/2025</td>
+                        <td>MS-0095</td>
+                        <td>Payment</td>
+                        <td>Cash</td>
+                        <td>10000</td>
+                        <td>reagent purcher cash paid by basir</td>
+                        <td>Basir</td>
+                        <td>Delete</td>
 
-        <tr>
-            <th colspan="2">Total</th>
-            <th><?php echo number_format($grand_invoice_total, 2); ?></th>
-            <th colspan="2"></th>
-            <th><?php echo number_format($grand_total_paid, 2); ?></th>
-            <th><?php echo number_format($grand_total_due, 2); ?></th>
-        </tr>
-    </table>
+                    </tr>
+                    <tr>
+                        <td>MS-2025001</td>
+                        <td>11/08/2025</td>
+                        <td>MS-0095</td>
+                        <td>Payment</td>
+                        <td>Cash</td>
+                        <td>10000</td>
+                        <td>reagent purcher cash paid by basir</td>
+                        <td>Basir</td>
+                        <td>Delete</td>
 
-    <p>
-        <strong>Final Due (Customer Balance):</strong>
-        <?php echo number_format($grand_total_due, 2); ?>
-    </p>
+                    </tr>
+                    <tr>
+                        <td>MS-2025001</td>
+                        <td>11/08/2025</td>
+                        <td>MS-0095</td>
+                        <td>Payment</td>
+                        <td>Cash</td>
+                        <td>10000</td>
+                        <td>reagent purcher cash paid by basir</td>
+                        <td>Basir</td>
+                        <td>Delete</td>
+
+                    </tr>
+                    <tr>
+                        <td>MS-2025001</td>
+                        <td>11/08/2025</td>
+                        <td>MS-0095</td>
+                        <td>Payment</td>
+                        <td>Cash</td>
+                        <td>10000</td>
+                        <td>reagent purcher cash paid by basir</td>
+                        <td>Basir</td>
+                        <td>Delete</td>
+
+                    </tr>
+                </table>
+            </div>
+
 </div>
+</div>
+    <script src="script.js"></script>
 </body>
 </html>

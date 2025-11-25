@@ -822,6 +822,7 @@ font-size: 20px;
   background-color: var(--color2);
   padding: 10px 20px;
   gap: 10px;
+  border-radius: 5px;
 }
 .cls17 select{
   padding: 10px 10px;
@@ -836,15 +837,51 @@ font-size: 20px;
   margin-bottom: 0px;
 }
 .cls18{
-  display: flex;
+  background: rgba(255, 255, 255, 0.8);
+backdrop-filter: blur(8px);
+padding: 20px;
+border-radius: 12px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+width: 90%;
+display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
-  flex-direction: row;
-  gap: 30px;
+  gap: 10%;
+  margin-top: 20px;
 }
+#id01{
+  padding: 5px 15px;
+}
+#id02{
+  border: none;
+}
+  
+#id02 th, #id02 td{
+  border: none;
+  text-align: left;
 
+font-size: 15px;
+color: #000000;
+background-color: #00000000;
 
-
+}
+#id02 select{
+  padding: 8px 20px;
+  border-radius: 4px;
+  width: 220px;
+}
+.cls18 table th{
+  width: 100%;
+}
+.cls18 table tr{
+  margin-top: 5px;
+}
+.cls18 table td input{
+  width: 200px;
+  margin-bottom: 0px;
+}
+.contant table{
+  margin-top: 20px;
+}
 
 
 
