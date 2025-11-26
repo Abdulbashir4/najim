@@ -23,6 +23,7 @@ $allowed_tables = [
     'installments' => 'installment_id',
     'customers' => 'customer_id',
     'invoices' => 'id',
+    'products' => 'product_id',
     // প্রয়োজনমতো আরও টেবিল এখানে যোগ করো
 ];
 
