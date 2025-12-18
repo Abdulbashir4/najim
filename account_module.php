@@ -16,7 +16,7 @@
             <option value="">Supplier Payment</option>
             <option value="">Customer Payment</option>
         </select>
-        <input type="text" placeholder="Invoice no">
+        <input type="text" placeholder="Name">
         <input type="date" placeholder="From Date">
         <input type="date" placeholder="To Date">
      </div>

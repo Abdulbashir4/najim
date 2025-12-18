@@ -261,7 +261,6 @@ h1{margin:10px 0 18px;}
 </style>
 </head>
 <body>
-<?php include 'header_and_sidebar_for_admin.php'; ?>
 <div class="main">
 <div class="for_content">
 <h1>Product Sale Entry</h1>

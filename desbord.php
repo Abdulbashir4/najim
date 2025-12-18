@@ -4,89 +4,127 @@
 <html>
 <head>
     <title>Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body >
-    <div class="page-content">
-<?php
-// মোট কাস্টমার সংখ্যা
-$result = $conn->query("SELECT COUNT(*) AS total_customers FROM customers");
-$row = $result->fetch_assoc();
-echo "<p>মোট কাস্টমার: <b>" . $row['total_customers'] . "</b></p>";
-?>
+<body class="bg-gray-100" >
+    <div class="p-8">
+        <?php
+        // মোট কাস্টমার সংখ্যা
+        $result = $conn->query("SELECT COUNT(*) AS total_customers FROM customers");
+        $row = $result->fetch_assoc();
+        echo "<p class='font-semibold text-lg'>মোট কাস্টমার: <b>" . $row['total_customers'] . "</b></p>";
+        ?>
 
-<h3>কাস্টমার লিস্ট</h3>
-<div class="for_pc">
-<table>
-    
-    <tr>
-        <th>ID</th>
-        <th>Customer Name</th>
-        <th>Contact Person</th>
-        <th>Phone</th>
-        <th>Details</th>
-        <th>Action</th>
+<h3 class="flex justify-center font-semibold">কাস্টমার লিস্ট</h3>
+<div class="hidden lg:block">
+<table class="border w-full">
+    <tr class="border bg-gray-50">
+        <th class="border py-1 px-2">ID</th>
+        <th class="border py-1 px-2">Customer Name</th>
+        <th class="border py-1 px-2">Contact Person</th>
+        <th class="border py-1 px-2">Phone</th>
+        <th class="border py-1 px-2">Details</th>
+        <th class="border py-1 px-2">Action</th>
     </tr>
     <?php
     $sql = "SELECT * FROM customers";
     $customers = $conn->query($sql);
     while ($c = $customers->fetch_assoc()) {
-        echo "<tr>
-            <td>{$c['customer_id']}</td>
-            <td>{$c['name']}</td>
-            <td>{$c['contact_person']}</td>
-            <td>{$c['phone']}</td>
-            <td><a href='customer.php?id={$c['customer_id']}'>Details....</a></td>
-            <td>
-            <button class='edit btn' onclick=\"editData('customers', '{$c['customer_id']}')\">Edit</button>
-            <button class='delete btn' onclick=\"deleteData('customers', '{$c['customer_id']}')\">Delete</button></td>
+        echo "<tr class='border bg-white'>
+            <td class='border py-1 px-2'>{$c['customer_id']}</td>
+            <td class='border py-1 px-2'>{$c['name']}</td>
+            <td class='border py-1 px-2'>{$c['contact_person']}</td>
+            <td class='border py-1 px-2'>{$c['phone']}</td>
+            <td class='border py-1 px-2'><a href='customer.php?id={$c['customer_id']}'>Details....</a></td>
+            <td class='border py-1 px-2'>
+            <button class='btn' onclick=\"editData('customers', '{$c['customer_id']}')\">Edit</button>
+            <button class='btn' onclick=\"deleteData('customers', '{$c['customer_id']}')\">Delete</button></td>
            
         </tr>";
     }
     ?>
 </table>
 </div>
-<div class="for_phone">
-    <table>
+<div class="block sm:hidden">
         <?php 
         $sql = "SELECT * FROM customers";
         $customers = $conn->query($sql);
         while ($c = $customers->fetch_assoc()) {
         echo "
-        <table border='1' cellspacing='0' cellpadding='6' style='margin-bottom:20px; border-collapse:collapse; width:100%; border-radius:7px;'>
-        <tr>
-            <th>Customer ID:</th>
-            <td>{$c['customer_id']}</td>
-        </tr>
+<table class='block sm:hidden w-full mb-4 border border-gray-300  overflow-hidden text-sm bg-white'>
 
-        <tr>
-        <th>Customer Name:</th>
-        <td>{$c['name']}</td>
-        </tr>
+  <tr class='border-b bg-gray-100'>
+    <th class='border px-4 py-2 text-left font-semibold w-1/3'>
+      Customer ID
+    </th>
+    <td class='border px-4 py-2 text-gray-800'>
+      {$c['customer_id']}
+    </td>
+  </tr>
 
-        <tr>
-        <th>Contact Person:</th>
-         <td>{$c['contact_person']}</td>
-        </tr>
+  <tr class='border-b'>
+    <th class='border px-4 py-2 text-left font-semibold'>
+      Customer Name
+    </th>
+    <td class='border px-4 py-2'>
+      {$c['name']}
+    </td>
+  </tr>
 
-        <tr>
-        <th>Phone:</th>
-        <td>{$c['phone']}</td>
-        </tr>
-        
-        <tr> 
-        <th>Details:</th>
-        <td><a href='customer.php?id={$c['customer_id']}'>Details....</a></td>
-        </tr>
-        <tr>
-        <th>Action:</th>
-        <td><button class='edit btn' onclick=\"editData('customers', '{$c['customer_id']}')\">Edit</button>
-        <button class='delete btn' onclick=\"deleteData('customers', '{$c['customer_id']}')\">Delete</button></td>
-        </tr>
-        ";
+  <tr class='border-b bg-gray-50'>
+    <th class='border px-4 py-2 text-left font-semibold'>
+      Contact Person
+    </th>
+    <td class='border px-4 py-2'>
+      {$c['contact_person']}
+    </td>
+  </tr>
+
+  <tr class='border-b'>
+    <th class='border px-4 py-2 text-left font-semibold'>
+      Phone
+    </th>
+    <td class='border px-4 py-2'>
+      {$c['phone']}
+    </td>
+  </tr>
+
+  <tr class='border-b bg-gray-50'>
+    <th class='border px-4 py-2 text-left font-semibold'>
+      Details
+    </th>
+    <td class='border px-4 py-2'>
+      <a href='customer.php?id={$c['customer_id']}'
+         class='text-blue-600 hover:text-blue-800 hover:underline font-medium'>
+        Details →
+      </a>
+    </td>
+  </tr>
+
+  <tr class='border bg-gray-50'>
+    <th class='border-r px-4 py-2 text-left font-semibold'>
+      Action
+    </th>
+    <td class=' px-4 py-2 flex gap-2'>
+      <button
+        class='px-3 py-1 rounded bg-blue-500 text-white text-xs hover:bg-blue-600 transition'
+        onclick=\"editData('customers', '{$c['customer_id']}')\">
+        Edit
+      </button>
+
+      <button
+        class='px-3 py-1 rounded bg-red-500 text-white text-xs hover:bg-red-600 transition'
+        onclick=\"deleteData('customers', '{$c['customer_id']}')\">
+        Delete
+      </button>
+    </td>
+  </tr>
+
+</table>
+";
+
     }
         ?>
-    </table>
 </div>
 </div>
 </body>

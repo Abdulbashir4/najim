@@ -24,15 +24,12 @@
             <p>MS Corporation</p>
             <hr>
         </div>
-        <div class="items">
-            <div class="sidebar_button">
+        <div class="items" >
+            <div class="sidebar_button" onclick="window.location.href='test.php'">
                 <img src="image/dashbord.png" alt="">
                 <span>DashBoard</span>
             </div>
-            <div class="sidebar_button" onclick="window.location.href='customer_page.php'">
-                <img src="image/user.png" alt="">
-                <span>Customer Management</span>
-            </div>
+            
             <div class="sidebar_button" onclick="window.location.href='employee_page.php'">
                 <img src="image/product.png" alt="">
                 <span>Employee Management</span>
@@ -65,9 +62,10 @@
         </div>
     </div>
   <div class="for_sidebar" >
-    <div class="sidebar_button">
+    <div class="sidebar_button" onclick="window.location.href='test.php'">
                 <img src="image/dashbord.png" alt="">
                 <span>DashBoard</span>
+                
     </div>
     <div class="sidebar_button" onclick="window.location.href='customer_page.php'">
                 <img src="image/user.png" alt="">

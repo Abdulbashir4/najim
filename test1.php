@@ -1,322 +1,266 @@
-<?php include'server_connection.php';?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Corporation</title>
-    
-    <style>
-        /* ==== MAIN AREA ==== */
-.main {
-    margin-left: 220px; /* sidebar space */
-    padding: 20px;
-    background: #f2f6ff;
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.for_content {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 25px rgba(0,0,0,0.1);
-}
-
-/* ==== TOP FILTER BAR ==== */
-.cls17 {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.cls17 select, 
-.cls17 input {
-    padding: 10px 12px;
-    border: 1px solid #bbb;
-    border-radius: 8px;
-    outline: none;
-    font-size: 14px;
-    transition: .3s;
-}
-
-.cls17 select:focus,
-.cls17 input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px #007bff;
-}
-
-/* ==== FORM TABLES SECTION ==== */
-.cls18 {
-    display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
-    margin-bottom: 25px;
-}
-
-#id02 {
-    width: 350px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    padding: 18px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-}
-
-#id02 th {
-    text-align: left;
-    padding: 10px 0;
-    font-size: 15px;
-    color: #333;
-}
-
-#id02 td {
-    padding: 8px 0;
-}
-
-#id02 select,
-#id02 input {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    outline: none;
-    transition: .3s;
-}
-
-#id02 input:focus,
-#id02 select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 4px #007bff;
-}
-
-/* ==== BUTTONS ==== */
-#id01 {
-    padding: 8px 20px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    margin: 3px;
-}
-
-button#id01:nth-child(1) {
-    background: #ff4d4d;
-    color: #fff;
-}
-
-button#id01:nth-child(2) {
-    background: #007bff;
-    color: #fff;
-}
-
-button#id01:hover {
-    opacity: .85;
-}
-
-/* ==== DATA TABLE ==== */
-.contant table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.contant th {
-    background: #007bff;
-    color: white;
-    padding: 12px;
-    text-align: left;
-}
-
-.contant td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.contant tr:hover {
-    background: #f0f7ff;
-}
-
-.contant td:last-child {
-    color: red;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* Responsive */
-@media(max-width: 768px){
-    .cls17 {
-        flex-direction: column;
-    }
-    .cls18 {
-        flex-direction: column;
-    }
-    .main {
-        margin-left: 0;
-    }
-}
-
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :root { --header-h:56px; }
+    .content-iframe { width:100%; height:calc(100vh - var(--header-h)); border:0; }
+    /* mobile panel hidden to right, animate to 0 */
+    .panel { transform: translateX(100%); transition: transform .25s ease; }
+    .panel.open { transform: translateX(0); }
+    .backdrop-visible { opacity:.35; pointer-events:auto; }
+    /* mini mode */
+    .mini .label { display:none; }
+    .mini .submenu { display:none!important; }
+  </style>
 </head>
-<body>
-<?php include 'header_and_sidebar_for_admin.php'; ?>
-    <div class="main">
-    <div class="for_content" id="contentArea">
-     <div class="cls17">
-        <select name="" id="">
-            <option value="">Supplier Payment</option>
-            <option value="">Customer Payment</option>
-        </select>
-        <input type="text" placeholder="Invoice no">
-        <input type="date" placeholder="From Date">
-        <input type="date" placeholder="To Date">
-     </div>
-        <div class="cls18">
-                <table id="id02">
-                    <tr>
-                        <th>Transsaction Type</th>
-                        <td> <select name="" id="">
-                            <option value="">Payment</option>
-                            <option value="">bill</option>
-                        </select> </td>
-                    </tr>
-                    <tr>
-                        <th>Payment Type</th>
-                        <td><select name="" id="">
-                            <option value="">Cash</option>
-                            <option value="">Bkash</option>
-                            <option value="">Bank Account</option>
-                        </select> </td>
-                    </tr>
-                    <tr>
-                        <th>Supplier</th>
-                        <td><select name="" id="">
-                            <option value="">Supplier</option>
-                            <option value="">Customer</option>
-                        </select></td>
-                    </tr>
-                    <tr>
-                        <th>Due</th>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">WelCome TO Supplier Basir</th>
-                        
-                    </tr>
-                </table>
-                <table id="id02">
-                    <tr>
-                        <th>Payment Date</th>
-                        <td><input type="date"></td>
-                    </tr>
-                    <tr>
-                        <th>Description</th>
-                        <td><input type="textarea"></td>
-                    </tr>
-                    <tr>
-                        <th>Amount</th>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <th>Amount</th>
-                        <td><input type="text"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><button id="id01">Clear</button> <button id="id01">submit</button></td>
-                    </tr>
-                </table>
+<body class="bg-gray-100 font-sans">
 
-            </div>
-            <div class="contant">
-                <table>
-                    <tr>
-                        <th>Invoice ID</th>
-                        <th>Date</th>
-                        <th>Supplier ID</th>
-                        <th>Trans: Type</th>
-                        <th>Paid by</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>Save By</th>
-                        <th>Action</th>
-                    </tr>
-                    <tr>
-                        <td>MS-2025001</td>
-                        <td>11/08/2025</td>
-                        <td>MS-0095</td>
-                        <td>Payment</td>
-                        <td>Cash</td>
-                        <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+<header id="hdr" class="sticky top-0 z-20 bg-white border-b">
+  <div class="px-4 py-3 flex items-center justify-between">
 
-                    </tr>
-                    <tr>
-                        <td>MS-2025001</td>
-                        <td>11/08/2025</td>
-                        <td>MS-0095</td>
-                        <td>Payment</td>
-                        <td>Cash</td>
-                        <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+    <!-- LEFT (Desktop only) -->
+    <div class="hidden sm:flex items-center gap-3">
+      <h1 class="text-xl font-semibold">Dashboard</h1>
 
-                    </tr>
-                    <tr>
-                        <td>MS-2025001</td>
-                        <td>11/08/2025</td>
-                        <td>MS-0095</td>
-                        <td>Payment</td>
-                        <td>Cash</td>
-                        <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+      <div class="relative">
+        <input id="globalSearch" 
+               class="border rounded px-3 py-2 w-64 lg:w-80"
+               placeholder="Search orders, products..." />
+        <button onclick="document.getElementById('globalSearch').value='';" 
+                class="absolute right-2 top-2 text-sm text-gray-500">✖</button>
+      </div>
+    </div>
 
-                    </tr>
-                    <tr>
-                        <td>MS-2025001</td>
-                        <td>11/08/2025</td>
-                        <td>MS-0095</td>
-                        <td>Payment</td>
-                        <td>Cash</td>
-                        <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+    <!-- RIGHT (Mobile & Desktop) -->
+    <div class="flex items-center justify-between w-full sm:w-auto">
 
-                    </tr>
-                    <tr>
-                        <td>MS-2025001</td>
-                        <td>11/08/2025</td>
-                        <td>MS-0095</td>
-                        <td>Payment</td>
-                        <td>Cash</td>
-                        <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+      <!-- LEFT SIDE (Admin info) -->
+      <div class="flex items-center gap-2">
+        <img src="https://i.pravatar.cc/40?img=12" class="w-9 h-9 rounded-full border" alt="Admin avatar"/>
+        <div class="text-sm">
+          <div class="font-medium">Admin</div>
+          <div class="text-xs text-gray-500">Super Admin</div>
+        </div>
+      </div>
 
-                    </tr>
-                    <tr>
-                        <td>MS-2025001</td>
-                        <td>11/08/2025</td>
-                        <td>MS-0095</td>
-                        <td>Payment</td>
-                        <td>Cash</td>
-                        <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+      <!-- RIGHT SIDE (Mobile menu button) -->
+      <button id="openMobile" class="md:hidden p-2 rounded hover:bg-gray-100 text-2xl ml-auto" aria-label="Open menu">
+        ☰
+      </button>
 
-                    </tr>
-                </table>
-            </div>
+    </div>
 
+  </div>
+</header>
+
+<div>
+  <div class="min-h-screen flex">
+
+    <!-- desktop sidebar (visible on md+) -->
+    <aside id="desktopSidebar" class="hidden md:flex flex-col bg-gray-800 text-white w-64 p-2">
+
+      <nav id="nav" class="p-2 flex-1 overflow-auto space-y-1" role="navigation">
+        <a class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" href="admin_dashbord.php" target="content_frame">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zM3 21h8v-6H3v6zM13 21h8V11h-8v10zM13 3v6h8V3h-8z"/></svg>
+          <span class="label">Dashboard</span>
+        </a>
+
+        <div>
+          <button data-sub="prod" class="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-gray-700" aria-expanded="false" aria-controls="prod">
+            <span class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/></svg>
+              <span class="label font-medium">Products</span>
+            </span>
+            <svg class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div id="prod" class="pl-12 space-y-1 submenu hidden">
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="add_product.php" target="content_frame">Add Product</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="product_list_view.php" target="content_frame">Product List</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="add_catagory_sub&brand.php" target="content_frame">Add Brand</a>
+          </div>
+        </div>
+        <!-- For orders  -->
+        <div>
+          <button data-sub="order" class="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-gray-700" aria-expanded="false" aria-controls="order">
+            <span class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/></svg>
+              <span class="label font-medium">Orders</span>
+            </span>
+            <svg class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div id="order" class="pl-12 space-y-1 submenu hidden">
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="admin_orders.php" target="content_frame">Order Running</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="complete_order.php" target="content_frame">Order Complete</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="add_catagory_sub&brand.php" target="content_frame">Add Brand</a>
+          </div>
+        </div>
+
+        <a class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" href="order_tracking.php" target="content_frame">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4 2.5L12 15l-2-4.5L6 8l4.5-1.5L12 2z"/></svg>
+          <span class="label">Order Tracking</span>
+        </a>
+        <a class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" href="company_info.php" target="content_frame">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4 2.5L12 15l-2-4.5L6 8l4.5-1.5L12 2z"/></svg>
+          <span class="label">Company Information</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- main -->
+    <main class="flex-1">
+      <iframe name="content_frame" src="admin_dashbord.php" class="content-iframe"></iframe>
+    </main>
+  </div>
 </div>
+
+<!-- MOBILE PANEL (shows full desktop sidebar content with icons) -->
+<div id="mobileWrap" class="fixed top-18 inset-0 z-40 md:hidden hidden">
+  <div id="backdrop" class="absolute inset-0 bg-black opacity-0 pointer-events-none transition-opacity"></div>
+
+  <aside id="panel" class="panel absolute right-0 top-0 bottom-0 w-64 bg-gray-800 text-white p-3 shadow-xl overflow-y-auto">
+
+    <!-- FULL SIDEBAR (same as desktop) -->
+    <nav class="space-y-1">
+     <nav id="nav" class="p-2 flex-1 overflow-auto space-y-1" role="navigation">
+        <a class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" href="admin_dashbord.php" target="content_frame">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zM3 21h8v-6H3v6zM13 21h8V11h-8v10zM13 3v6h8V3h-8z"/></svg>
+          <span class="label">Dashboard</span>
+        </a>
+
+        <div>
+          <button data-sub="prod2" class="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-gray-700" aria-expanded="false" aria-controls="prod">
+            <span class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/></svg>
+              <span class="label font-medium">Products</span>
+            </span>
+            <svg class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div id="prod2" class="pl-12 space-y-1 submenu hidden">
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="add_product.php" target="content_frame">Add Product</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="product_list_view.php" target="content_frame">Product List</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="add_catagory_sub&brand.php" target="content_frame">Add Brand</a>
+          </div>
+        </div>
+        <!-- For orders  -->
+        <div>
+          <button data-sub="order2" class="w-full flex items-center justify-between px-3 py-2 rounded hover:bg-gray-700" aria-expanded="false" aria-controls="order">
+            <span class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/></svg>
+              <span class="label font-medium">Orders</span>
+            </span>
+            <svg class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div id="order2" class="pl-12 space-y-1 submenu hidden">
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="admin_orders.php" target="content_frame">Order Running</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="complete_order.php" target="content_frame">Order Complete</a>
+            <a class="block px-3 py-2 rounded hover:bg-gray-700" href="add_catagory_sub&brand.php" target="content_frame">Add Brand</a>
+          </div>
+        </div>
+
+        <a class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" href="order_tracking.php" target="content_frame">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4 2.5L12 15l-2-4.5L6 8l4.5-1.5L12 2z"/></svg>
+          <span class="label">Order Tracking</span>
+        </a>
+        <a class="nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-700" href="company_info.php" target="content_frame">
+          <svg class="w-5 h-5 text-indigo-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4 2.5L12 15l-2-4.5L6 8l4.5-1.5L12 2z"/></svg>
+          <span class="label">Company Information</span>
+        </a>
+    </nav>
+  </aside>
 </div>
-    <script src="script.js"></script>
+
+<script>
+(function(){
+  // header height var
+  const setHeaderH = ()=> {
+    const h = document.getElementById('hdr')?.offsetHeight || 56;
+    document.documentElement.style.setProperty('--header-h', h + 'px');
+  };
+  setHeaderH();
+  window.addEventListener('resize', setHeaderH);
+
+  // submenu toggle (desktop & mobile)
+  document.querySelectorAll('[data-sub]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.sub;
+      const el = document.getElementById(id);
+      if(!el) return;
+      const hidden = el.classList.toggle('hidden');
+      btn.setAttribute('aria-expanded', String(!hidden));
+      el.setAttribute('aria-hidden', String(hidden));
+    });
+  });
+
+  // menu search (desktop)
+  const search = document.getElementById('search');
+  if(search){
+    search.addEventListener('input', e=>{
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('#nav a, #nav button').forEach(el=>{
+        const txt = (el.innerText||'').toLowerCase();
+        el.style.display = (!q || txt.includes(q)) ? '' : 'none';
+      });
+    });
+  }
+
+  // mobile panel open/close (toggle)
+  const mobileWrap = document.getElementById('mobileWrap');
+  const panel = document.getElementById('panel');
+  const backdrop = document.getElementById('backdrop');
+  const openBtn = document.getElementById('openMobile');
+  const closeBtn = document.getElementById('closeMobile');
+
+  function showMobile(){
+    if(!mobileWrap || !panel || !backdrop) return;
+    mobileWrap.classList.remove('hidden');
+    // backdrop visible
+    backdrop.style.transition = 'opacity .2s';
+    backdrop.style.opacity = '0.35';
+    backdrop.style.pointerEvents = 'auto';
+    // slide panel in
+    requestAnimationFrame(()=> panel.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+  }
+  function hideMobile(){
+    if(!mobileWrap || !panel || !backdrop) return;
+    panel.classList.remove('open');
+    backdrop.style.opacity = '0';
+    backdrop.style.pointerEvents = 'none';
+    setTimeout(()=> mobileWrap.classList.add('hidden'), 240);
+    document.body.style.overflow = '';
+  }
+
+  openBtn?.addEventListener('click', ()=> panel?.classList.contains('open') ? hideMobile() : showMobile());
+  closeBtn?.addEventListener('click', hideMobile);
+  backdrop?.addEventListener('click', hideMobile);
+
+  // close mobile panel when any panel link is clicked (allow submenu buttons to toggle without closing)
+  document.querySelectorAll('#panel a').forEach(a=>{
+    a.addEventListener('click', ()=> {
+      // short delay so target navigation can process
+      setTimeout(hideMobile, 80);
+    });
+  });
+
+  // active link highlight (desktop)
+  document.querySelectorAll('a[target="content_frame"]').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('bg-gray-700'));
+      if(a.classList.contains('nav-item')) a.classList.add('bg-gray-700');
+      if(window.innerWidth < 768) hideMobile();
+    });
+  });
+
+})();
+</script>
+
 </body>
 </html>
