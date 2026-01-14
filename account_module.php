@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<?php include 'header_and_sidebar_for_admin.php'; ?>
     <div class="main">
     <div class="for_content" id="contentArea">
      <div class="cls17">
@@ -23,10 +22,12 @@
         <div class="cls18">
                 <table id="id02">
                     <tr>
-                        <th>Transsaction Type</th>
+                        <th>Customer Name</th>
                         <td> <select name="" id="">
-                            <option value="">Payment</option>
-                            <option value="">bill</option>
+                            <option value="">Biomass International</option>
+                            <option value="">Ms Corporation</option>
+                            <option value="">It Solution</option>
+                            <option value="">Developer basir</option>
                         </select> </td>
                     </tr>
                     <tr>
@@ -63,11 +64,11 @@
                         <td><input type="textarea"></td>
                     </tr>
                     <tr>
-                        <th>Amount</th>
+                        <th>Total Amount</th>
                         <td><input type="text"></td>
                     </tr>
                     <tr>
-                        <th>Amount</th>
+                        <th>Paid Amount</th>
                         <td><input type="text"></td>
                     </tr>
                     <tr>
@@ -79,15 +80,14 @@
             <div class="contant">
                 <table>
                     <tr>
-                        <th>Invoice ID</th>
                         <th>Date</th>
-                        <th>Supplier ID</th>
-                        <th>Trans: Type</th>
-                        <th>Paid by</th>
-                        <th>Amount</th>
                         <th>Description</th>
-                        <th>Save By</th>
-                        <th>Action</th>
+                        <th>Invoice</th>
+                        <th>Debit TK</th>
+                        <th>Credit TK</th>
+                        <th>Net Balance</th>
+                        
+                        
                     </tr>
                     <tr>
                         <td>MS-2025001</td>
@@ -96,9 +96,7 @@
                         <td>Payment</td>
                         <td>Cash</td>
                         <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+                        
 
                     </tr>
                     <tr>
@@ -108,9 +106,7 @@
                         <td>Payment</td>
                         <td>Cash</td>
                         <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+                        
 
                     </tr>
                     <tr>
@@ -120,9 +116,7 @@
                         <td>Payment</td>
                         <td>Cash</td>
                         <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+                        
 
                     </tr>
                     <tr>
@@ -132,9 +126,7 @@
                         <td>Payment</td>
                         <td>Cash</td>
                         <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+                        
 
                     </tr>
                     <tr>
@@ -144,9 +136,7 @@
                         <td>Payment</td>
                         <td>Cash</td>
                         <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+                        
 
                     </tr>
                     <tr>
@@ -156,9 +146,7 @@
                         <td>Payment</td>
                         <td>Cash</td>
                         <td>10000</td>
-                        <td>reagent purcher cash paid by basir</td>
-                        <td>Basir</td>
-                        <td>Delete</td>
+                        
 
                     </tr>
                 </table>

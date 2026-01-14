@@ -28,7 +28,7 @@ echo "<p class='text-2xl font-semibold'>Total Product: <b>" . $row['total_produc
         <th class="border px-2 py-1">Total Sell</th>
         <th class="border px-2 py-1">Total Bye</th>
         <th class="border px-2 py-1">Product Code</th>
-        <th class="border px-2 py-1">Action</th>
+        <th class="border px-2 py-1 w-34">Action</th>
     </tr>
     <?php
 $sql = "
@@ -60,8 +60,8 @@ while ($row = $result->fetch_assoc()) {
         <td class='border px-2 py-1'>{$row['total_buy_qty']}</td>
         <td class='border px-2 py-1'>{$row['product_id']}</td>
         <td class='border px-2 py-1'>
-            <button class='px-4 rounded border bg-blue-200 mr-2 py-1' onclick=\"editData('products', '{$row['product_id']}')\">Edit</button>
-            <button class='px-4 rounded border bg-red-200 ml-2 py-1' onclick=\"deleteData('products', '{$row['product_id']}')\">Delete</button>
+            <button class='px-2 rounded border bg-blue-200 py-1' onclick=\"editData('products', '{$row['product_id']}')\">Edit</button>
+            <button class='px-2 rounded border bg-red-200 py-1' onclick=\"deleteData('products', '{$row['product_id']}')\">Delete</button>
         </td>
     </tr>";
     $sl++;

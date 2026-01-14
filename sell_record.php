@@ -54,7 +54,6 @@ button:hover {
 </style>
 </head>
 <body>
-<?php include 'header_and_sidebar_for_admin.php'; ?>
 
 <div class="main">
 <div class="for_content" id="contentArea">
