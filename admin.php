@@ -5,7 +5,7 @@
   <meta http-equiv="refresh" content="4000">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Demo</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     html, body {
@@ -183,7 +183,11 @@
                 </a>
                 <a href="account_module.php" target="content_frame" onclick="handleMenuClick()"
                     class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
-                    Payment Statement
+                    Record
+                </a>
+                <a href="./bill and account/payment.php" target="content_frame" onclick="handleMenuClick()"
+                    class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
+                    Payment 
                 </a>
                 
 
@@ -285,7 +289,7 @@
     <main class="flex-1 bg-blue-300">
       <iframe
         name="content_frame"
-        src="account_module.php"
+        src="bill and account/payment.php"
         class="content-iframe bg-gray-100">
       </iframe>
     </main>

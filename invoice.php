@@ -1,40 +1,39 @@
 <?php
 include 'server_connection.php';
 
-// 🔹 ইনভয়েস নম্বর নেওয়া
-$invoice = $_GET['invoice'] ?? '';
+$invoice = trim($_GET['invoice'] ?? '');
+if (!$invoice) die("❌ No invoice number provided!");
 
-if (!$invoice) {
-    die("❌ No invoice number provided!");
-}
-
-// 🔹 Sale, Customer, Employee তথ্য
-$sql = "SELECT s.*, c.*, e.name AS employee_name
+/* ✅ Sale + Customer + Employee (Prepared) */
+$sql = "SELECT s.*, c.name AS customer_name, c.address AS customer_address, c.phone AS customer_phone,
+        e.name AS employee_name
         FROM sales s
-        JOIN customers c ON s.customer_id = c.customer_id
-        JOIN employees e ON s.employee_id = e.employee_id
-        WHERE s.invoice_no = '$invoice'";
+        LEFT JOIN customers c ON s.customer_id = c.id
+        LEFT JOIN employees e ON s.employee_id = e.employee_id
+        WHERE TRIM(s.invoice_no) = ?";
 
-$sale_result = $conn->query($sql);
-if(!$sale_result) {
-    die("Query Failed (Sales+Customer): " . $conn->error);
-}
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $invoice);
+$stmt->execute();
+$sale_result = $stmt->get_result();
 
 $sale = $sale_result->fetch_assoc();
-if(!$sale) {
+if (!$sale) {
     die("No sale found with invoice $invoice");
 }
 
-// 🔹 Sales Items
-$items_sql = "SELECT * FROM sales WHERE invoice_no = '$invoice'";
-$sales_items = $conn->query($items_sql);
-if(!$sales_items) {
-    die("Query Failed (Sales Items): " . $conn->error);
-}
+/* ✅ Sales Items (Prepared + TRIM) */
+$items_sql = "SELECT * FROM sales WHERE TRIM(invoice_no) = ?";
+$item_stmt = $conn->prepare($items_sql);
+$item_stmt->bind_param("s", $invoice);
+$item_stmt->execute();
+$sales_items = $item_stmt->get_result();
 
 $grand_total = 0;
 $total_discount = 0;
 ?>
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -200,9 +199,9 @@ footer {
   <hr>
     <section style="margin-bottom:20px;">
       <strong>Bill To:</strong><br>
-      <b> Name: </b><?= htmlspecialchars($sale['name']) ?><br>
-      <b>Address: </b><?= htmlspecialchars($sale['address']) ?><br>
-      <b>Phone:</b> <?= htmlspecialchars($sale['phone']) ?>
+      <b> Name: </b><?= htmlspecialchars($sale['customer_name']) ?><br>
+      <b>Address: </b><?= htmlspecialchars($sale['customer_address']) ?><br>
+      <b>Phone:</b> <?= htmlspecialchars($sale['customer_phone']) ?>
     </section>
 
     <table>

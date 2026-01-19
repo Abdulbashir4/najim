@@ -31,14 +31,14 @@
     $customers = $conn->query($sql);
     while ($c = $customers->fetch_assoc()) {
         echo "<tr class='border bg-white'>
-            <td class='border py-1 px-2'>{$c['customer_id']}</td>
+            <td class='border py-1 px-2'>{$c['id']}</td>
             <td class='border py-1 px-2'>{$c['name']}</td>
             <td class='border py-1 px-2'>{$c['contact_person']}</td>
             <td class='border py-1 px-2'>{$c['phone']}</td>
-            <td class='border py-1 px-2'><a href='customer.php?id={$c['customer_id']}'>Details....</a></td>
+            <td class='border py-1 px-2'><a href='customer.php?id={$c['id']}'>Details....</a></td>
             <td class='border py-1 px-2'>
-            <button class='btn' onclick=\"editData('customers', '{$c['customer_id']}')\">Edit</button>
-            <button class='btn' onclick=\"deleteData('customers', '{$c['customer_id']}')\">Delete</button></td>
+            <button class='btn' onclick=\"editData('customers', '{$c['id']}')\">Edit</button>
+            <button class='btn' onclick=\"deleteData('customers', '{$c['id']}')\">Delete</button></td>
            
         </tr>";
     }
@@ -58,7 +58,7 @@
       Customer ID
     </th>
     <td class='border px-4 py-2 text-gray-800'>
-      {$c['customer_id']}
+      {$c['id']}
     </td>
   </tr>
 
@@ -94,7 +94,7 @@
       Details
     </th>
     <td class='border px-4 py-2'>
-      <a href='customer.php?id={$c['customer_id']}'
+      <a href='customer.php?id={$c['id']}'
          class='text-blue-600 hover:text-blue-800 hover:underline font-medium'>
         Details →
       </a>
@@ -108,13 +108,13 @@
     <td class=' px-4 py-2 flex gap-2'>
       <button
         class='px-3 py-1 rounded bg-blue-500 text-white text-xs hover:bg-blue-600 transition'
-        onclick=\"editData('customers', '{$c['customer_id']}')\">
+        onclick=\"editData('customers', '{$c['id']}')\">
         Edit
       </button>
 
       <button
         class='px-3 py-1 rounded bg-red-500 text-white text-xs hover:bg-red-600 transition'
-        onclick=\"deleteData('customers', '{$c['customer_id']}')\">
+        onclick=\"deleteData('customers', '{$c['id']}')\">
         Delete
       </button>
     </td>

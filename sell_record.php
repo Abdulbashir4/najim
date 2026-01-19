@@ -92,7 +92,7 @@ $cou = $conn->query("SELECT * FROM invoices")->num_rows;
 <?php
 $sql = "SELECT i.*, c.name AS customer_name
         FROM invoices i
-        LEFT JOIN customers c ON i.customer_id = c.customer_id
+        LEFT JOIN customers c ON i.customer_id = c.id
         ORDER BY i.id DESC";
 $result = $conn->query($sql);
 $sl = 1;
