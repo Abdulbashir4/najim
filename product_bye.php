@@ -20,14 +20,14 @@
                 <h1>Bye Info</h1>
                 <table>
                     <tr>
-                        <th>Shop Name:</th>
+                        <th>Supplyer Name:</th>
                         <td><select name="shop_name" id="">
                         <option value="">Select Shop</option>
                         <?php 
-                        $shop_name = $conn->query("SELECT * FROM shops");
+                        $shop_name = $conn->query("SELECT * FROM suppliers");
                         while($s = $shop_name->fetch_assoc()){
                             echo "
-                            <option value='{$s['id']}'>{$s['shop_name']}</option>
+                            <option value='{$s['id']}'>{$s['name']}</option>
                             ";
                         }
                         ?>

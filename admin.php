@@ -173,17 +173,10 @@
                     </svg>
                 </div>
                 <div id="account&payment" class="submenu mt-1 space-y-1 border-l-2 border-blue-400 hidden">
-                <a href="account_module.php" target="content_frame" onclick="handleMenuClick()"
-                    class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
-                    Account Module
-                </a>
+            
                 <a href="sell_record.php" target="content_frame" onclick="handleMenuClick()"
                     class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
                     Sell Record
-                </a>
-                <a href="account_module.php" target="content_frame" onclick="handleMenuClick()"
-                    class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
-                    Record
                 </a>
                 <a href="./bill and account/payment.php" target="content_frame" onclick="handleMenuClick()"
                     class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
@@ -223,10 +216,6 @@
                 <a href="view_shop.php" target="content_frame" onclick="handleMenuClick()"
                     class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
                     Store Manager
-                </a>
-                <a href="add_payment.php" target="content_frame" onclick="handleMenuClick()"
-                    class="flex justify-normal px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-200 hover:bg-blue-500 hover:text-white hover:translate-x-1 transition-all duration-200">
-                    Payment
                 </a>
 
         </div>
@@ -286,20 +275,20 @@
 </aside>
 
     <!-- MAIN -->
-    <main class="flex-1 bg-blue-300">
+    <!-- <main class="flex-1 bg-blue-300">
       <iframe
         name="content_frame"
         src="bill and account/payment.php"
         class="content-iframe bg-gray-100">
       </iframe>
-    </main>
-    <!-- <main class="flex-1 bg-blue-300">
+    </main> -->
+    <main class="flex-1 bg-blue-300">
       <iframe
         name="content_frame"
         src="default_dashbord.php"
         class="content-iframe bg-gray-100">
       </iframe>
-    </main> -->
+    </main>
 
   </div>
 </div>

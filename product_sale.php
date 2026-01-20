@@ -6,6 +6,10 @@ ini_set('display_errors', 1);
 
 try {
     if (isset($_POST['sale_submit'])) {
+
+        // ✅ সব query একসাথে safe রাখার জন্য Transaction
+        $conn->begin_transaction();
+
         $employee_id  = intval($_POST['sale_by']);
         $branch_id    = intval($_POST['sale_from']);
         $customer_id  = intval($_POST['customer']);
@@ -14,9 +18,10 @@ try {
         $discount_all = floatval($_POST['discount'] ?? 0);
         $desc         = 'Sale entry via form';
 
-        // ✅ ইনভয়েস নম্বর জেনারেট
+        // ✅ Invoice Number Generate
         $year = date('Y');
         $result = $conn->query("SELECT invoice_no FROM invoices WHERE invoice_no LIKE 'MS-$year-%' ORDER BY id DESC LIMIT 1");
+
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
             preg_match('/MS-\d{4}-(\d+)/', $row['invoice_no'], $matches);
@@ -25,30 +30,49 @@ try {
         } else {
             $new = 1;
         }
+
         $invoice_no = "MS-$year-" . str_pad($new, 4, '0', STR_PAD_LEFT);
 
-        // ✅ invoices টেবিলে ইনসার্ট
-        $stmt = $conn->prepare("INSERT INTO invoices 
+        // ✅ Insert into invoices
+        $stmt = $conn->prepare("
+            INSERT INTO invoices 
             (invoice_no, employee_id, branch_id, sale_date, customer_id, paid_amount, discount, description)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("siisidds", $invoice_no, $employee_id, $branch_id, $sale_date, $customer_id, $paid_amount, $discount_all, $desc);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $stmt->bind_param(
+            "siisidds",
+            $invoice_no,
+            $employee_id,
+            $branch_id,
+            $sale_date,
+            $customer_id,
+            $paid_amount,
+            $discount_all,
+            $desc
+        );
         $stmt->execute();
         $invoice_id = $conn->insert_id;
 
-        // 🔹 product name ফেচ করার prepared stmt
+        // ✅ Prepared Statements
         $pnameStmt = $conn->prepare("SELECT product_name FROM products WHERE product_id = ?");
 
-        // 🔹 invoice_items insert
-        $itemStmt = $conn->prepare("INSERT INTO invoice_items 
+        $itemStmt = $conn->prepare("
+            INSERT INTO invoice_items 
             (invoice_id, product_id, qty, unit_price, total_price, discount_tk, discount_per)
-            VALUES (?, ?, ?, ?, ?, ?, ?)");
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
 
-        // 🔹 ✅ sales insert
-        $saleStmt = $conn->prepare("INSERT INTO sales 
+        $saleStmt = $conn->prepare("
+            INSERT INTO sales 
             (customer_id, employee_id, product_name, sale_amount, paid_amount, qty, unit, description, sale_date, invoice_no, branch_id, unit_price, discount_tk, discount_per, discount)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+
+        // ✅ Total sale amount
+        $total_sale_amount = 0;
 
         foreach ($_POST['product_id'] as $i => $product_id) {
+
             $product_id   = intval($product_id);
             $qty          = floatval($_POST['qty'][$i]);
             $unit_per     = $_POST['unit'][$i];
@@ -56,14 +80,35 @@ try {
             $discount_tk  = floatval($_POST['discount_tk'][$i] ?? 0);
             $discount_per = floatval($_POST['discount_per'][$i] ?? 0);
 
-            $base_total  = $qty * $unit_price;
-            $final_total = $base_total - ($discount_tk ?: ($base_total * $discount_per / 100));
+            $base_total = $qty * $unit_price;
 
-            // invoice_items ➜ insert
-            $itemStmt->bind_param("iiidddd", $invoice_id, $product_id, $qty, $unit_price, $final_total, $discount_tk, $discount_per);
+            // ✅ Item discount calculate
+            $item_discount = 0;
+            if ($discount_tk > 0) {
+                $item_discount = $discount_tk;
+            } elseif ($discount_per > 0) {
+                $item_discount = ($base_total * $discount_per / 100);
+            }
+
+            $final_total = $base_total - $item_discount;
+
+            // ✅ invoice_items insert
+            $itemStmt->bind_param(
+                "iiidddd",
+                $invoice_id,
+                $product_id,
+                $qty,
+                $unit_price,
+                $final_total,
+                $discount_tk,
+                $discount_per
+            );
             $itemStmt->execute();
 
-            // product_name বের করা
+            // ✅ grand total accumulate
+            $total_sale_amount += $final_total;
+
+            // ✅ product name fetch
             $pname = '';
             $pnameStmt->bind_param("i", $product_id);
             $pnameStmt->execute();
@@ -72,7 +117,7 @@ try {
                 $pname = $rowP['product_name'];
             }
 
-            // ✅ sales ➜ insert
+            // ✅ sales insert
             $saleStmt->bind_param(
                 "iisdddssssidddi",
                 $customer_id,
@@ -94,13 +139,51 @@ try {
             $saleStmt->execute();
         }
 
+        // ✅ Invoice-level discount apply
+        $invoice_total_after_discount = $total_sale_amount - $discount_all;
+        if ($invoice_total_after_discount < 0) {
+            $invoice_total_after_discount = 0;
+        }
+
+        // ✅ statements insert (YOUR TABLE: party_type, party_id, created_at, credit, invoice_no)
+        $party_type = "customer";
+
+        $statementCredit = $conn->prepare("
+            INSERT INTO statements (party_type, party_id, created_at, debit, credit, invoice_no)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+
+        $statementCredit->bind_param(
+            "sisdds",
+            $party_type,
+            $customer_id,
+            $sale_date,
+            $paid_amount,
+            $invoice_total_after_discount,
+            $invoice_no
+        );
+
+        $statementCredit->execute();
+
+        // ✅ সবকিছু ঠিক থাকলে COMMIT
+        $conn->commit();
+
         echo "<script>window.location='invoice.php?invoice={$invoice_no}';</script>";
         exit;
     }
+
 } catch (mysqli_sql_exception $e) {
+
+    // ✅ Error হলে Rollback
+    if (isset($conn)) {
+        $conn->rollback();
+    }
+
     echo "<h3 style='color:red;'>⚠️ Database Error:</h3><pre>{$e->getMessage()}</pre>";
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

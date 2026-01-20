@@ -238,33 +238,21 @@ function dmy($dt)
             $total_credit += $credit;
 
             // ✅ Running Balance
-            $running_balance = $running_balance + $debit - $credit;
+            $running_balance = $running_balance + $credit - $debit ;
 
             // ✅ Voucher Type text
-            $voucher = $row["trx_type"] ?: ($row["pay_type"] ?: "Transaction");
+            $voucher = $row["trx_type"] ?: ($row["pay_type"] ?: "Sales");
           ?>
             <tr>
               <td class="border border-1 border-gray-300 p-2"><?= dmy($row["created_at"]) ?></td>
               <td class="border border-1 border-gray-300 p-2"><?= htmlspecialchars($voucher) ?></td>
-              <td class="border border-1 border-gray-300 p-2"><?= money($debit) ?></td>
               <td class="border border-1 border-gray-300 p-2"><?= money($credit) ?></td>
+              <td class="border border-1 border-gray-300 p-2"><?= money($debit) ?></td>
               <td class="border border-1 border-gray-300 p-2"><?= money($running_balance) ?></td>
             </tr>
           <?php endwhile; ?>
 
         </tbody>
-
-        <tfoot>
-          <?php
-            $closing_balance = $opening_balance + $total_debit - $total_credit;
-          ?>
-          <tr class="bg-gray-100 font-bold">
-            <td class="border border-1 border-gray-300 p-2" colspan="2">Total</td>
-            <td class="border border-1 border-gray-300 p-2"><?= money($total_debit) ?></td>
-            <td class="border border-1 border-gray-300 p-2"><?= money($total_credit) ?></td>
-            <td class="border border-1 border-gray-300 p-2"><?= money($closing_balance) ?></td>
-          </tr>
-        </tfoot>
 
       </table>
     </div>

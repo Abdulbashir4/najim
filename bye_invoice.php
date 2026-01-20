@@ -10,7 +10,7 @@ if (!$invoice) {
 
 $sql_bye = "SELECT b.*,sh.*,p.*, i.*
                 FROM bye_info b
-                LEFT JOIN shops sh ON b.shop_name = sh.id
+                LEFT JOIN suppliers sh ON b.shop_name = sh.id
                 LEFT JOIN products p ON b.product_name = p.product_id
                 LEFT JOIN invoices i ON b.invoice_no = i.invoice_no
                 WHERE b.invoice_no = '$invoice'";
